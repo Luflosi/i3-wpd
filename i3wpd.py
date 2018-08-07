@@ -87,4 +87,4 @@ if __name__ == '__main__':
 		exit()
 
 	while True:
-		time.sleep(1)
+		time.sleep(600)
