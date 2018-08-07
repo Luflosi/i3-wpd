@@ -15,7 +15,7 @@ class i3_Wpd:
 			wp_dir += '/'
 		self.wp_dir = wp_dir
 		self.files = os.listdir(wp_dir)
-		self.files = filter(lambda file: file.endswith(('.png', '.jpg', '.gif', '.svg')), self.files)
+		self.files = [file for file in self.files if file.endswith(('.png', '.jpg', '.gif', '.svg'))]
 		self.current_files = {}
 		dbg('Launch!')
 		self.ws_reload()
