@@ -23,7 +23,7 @@ class i3_Wpd:
 		i3.subscribe(['workspace', 'shutdown', 'output'], self.focus_changed_handler)
 
 	def change_wallpaper(self):
-		dbg("Number of current wallpapers: " + len(self.current_files))
+		dbg("Number of current wallpapers: " + str(len(self.current_files)))
 		self.current_files = {file: random.choice(self.files) for file in self.current_files}
 
 	def set_wp(self):
