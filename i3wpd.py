@@ -25,6 +25,7 @@ class i3_Wpd:
 	def change_wallpaper(self):
 		dbg("Number of current wallpapers: " + str(len(self.current_files)))
 		self.current_files = {file: random.choice(self.files) for file in self.current_files}
+		self.set_wp()
 
 	def set_wp(self):
 		"""Sets wallpaper, assuming i3-msg reports outputs in the same order as xinerama."""
