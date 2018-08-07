@@ -16,7 +16,7 @@ class i3_Wpd:
 		self.img_format = img_format
 		dbg('Launch!')
 		self.ws_reload()
-		
+
 		i3.subscribe(['workspace', 'shutdown', 'output'], self.focus_changed_handler)
 
 	def set_wp(self):
@@ -88,4 +88,3 @@ if __name__ == '__main__':
 
 	while True:
 		time.sleep(1)
-	
