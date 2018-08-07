@@ -22,11 +22,6 @@ class i3_Wpd:
 
 		i3.subscribe(['workspace', 'shutdown', 'output'], self.focus_changed_handler)
 
-	def change_wallpaper(self):
-		dbg("Number of current wallpapers: " + str(len(self.current_files)))
-		self.current_files = {file: random.choice(self.files) for file in self.current_files}
-		self.set_wp()
-
 	def set_wp(self):
 		"""Sets wallpaper, assuming i3-msg reports outputs in the same order as xinerama."""
 		cmd = self.wp_cmd
@@ -40,6 +35,11 @@ class i3_Wpd:
 			cmd += ' ' + self.wp_dir + file
 		dbg(cmd)
 		os.system(cmd)
+
+	def change_wallpaper(self):
+		dbg("Number of current wallpapers: " + str(len(self.current_files)))
+		self.current_files = {file: random.choice(self.files) for file in self.current_files}
+		self.set_wp()
 
 	def ws_update(self):
 		"""Call on workspace focus change"""
