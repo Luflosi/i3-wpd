@@ -8,22 +8,34 @@ import i3msg as i3
 I3WPD_DEBUG = False
 class i3_Wpd:
 	"""Wallpaper setter daemon"""
-	def __init__(self, bg_options, wp_dir, img_format):
+	def __init__(self, bg_options, wp_dir):
 		self.wp_cmd = 'feh --no-fehbg ' + bg_options
 		if not wp_dir.endswith('/'):
 			wp_dir += '/'
 		self.wp_dir = wp_dir
-		self.img_format = img_format
+		self.files = os.listdir(wp_dir)
+		self.files = filter(lambda file: file.endswith(('.png', '.jpg', '.gif', '.svg')), self.files)
+		self.current_files = {}
 		dbg('Launch!')
 		self.ws_reload()
 
 		i3.subscribe(['workspace', 'shutdown', 'output'], self.focus_changed_handler)
 
+	def change_wallpaper(self)
+		dbg("Number of current wallpapers: " + len(self.current_files))
+		self.current_files = {file: random.choice(self.files) for file in self.current_files}
+
 	def set_wp(self):
 		"""Sets wallpaper, assuming i3-msg reports outputs in the same order as xinerama."""
 		cmd = self.wp_cmd
 		for ws in self.active_workspaces:
-			cmd += ' ' + self.wp_dir + ws + self.img_format
+			file = None
+			try:
+				file = self.current_files[ws]
+			except KeyError:
+				file = random.choice(self.files)
+				self.current_files[ws] = file
+			cmd += ' ' + self.wp_dir + file
 		dbg(cmd)
 		os.system(cmd)
 
@@ -76,15 +88,18 @@ def resolve_path(dir):
 	return cur_dir
 
 if __name__ == '__main__':
+	obj = None
+	interval = float(sys.argv[-1])
 	if len(sys.argv) == 4:
-		i3_Wpd(sys.argv[1], resolve_path(sys.argv[2]), sys.argv[3])
+		obj = i3_Wpd(sys.argv[1], resolve_path(sys.argv[2]))
 	elif len(sys.argv) == 3:
-		i3_Wpd('--bg-center --bg black', resolve_path(sys.argv[1]), sys.argv[2])
+		obj = i3_Wpd('--bg-center --bg black', resolve_path(sys.argv[1]))
 	else:
 		print('i3wpd.py - sets a custom wallpaper on every desktop')
-		print('usage: i3wpd.py [\"options\"] directory filetype')
+		print('usage: i3wpd.py [\"options\"] directory interval')
 		print('options: \"--bg-center|--bg-fill|--bg-scale [--bg black|white]\".\nOther options may apply, see man feh(1).')
 		exit()
 
 	while True:
-		time.sleep(600)
+		time.sleep(interval)
+		obj.change_wallpaper()
