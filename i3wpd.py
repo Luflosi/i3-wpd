@@ -32,7 +32,7 @@ class i3_Wpd:
 			except KeyError:
 				file = random.choice(self.files)
 				self.current_files[ws] = file
-			cmd += ' ' + self.wp_dir + file
+			cmd += " '" + self.wp_dir + file + "'"
 		dbg(cmd)
 		os.system(cmd)
 
