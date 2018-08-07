@@ -4,6 +4,7 @@ import os
 import sys
 import time
 import i3msg as i3
+import random
 
 I3WPD_DEBUG = False
 class i3_Wpd:
